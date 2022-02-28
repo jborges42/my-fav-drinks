@@ -10,7 +10,8 @@
                     <a href="{{ route('drinks.create') }}" class="btn btn-success">Adicionar</a>
                 </div>
                 <div class="card-body">
-                    @if (session('status'))
+                    @if (session('alert') )
+                    {{dd(session('alert'))}}
                     <div class="alert alert-success" role="alert">
                         {{ session('status') }}
                     </div>
@@ -26,16 +27,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($drinks as $drink )
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
+                                <th scope="row"> {{ $drink->id }} </th>
+                                <td>{{ $drink->name }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-primary"><i class="fa-solid fa-list"></i>Detalhes</a>
-                                    <a href="#" class="btn btn-sm btn-secondary"><i class="fa-solid fa-pencil"></i>Editar</a>
-                                    <a href="#" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i>Excluir</a>
+                                    <input class="form-check-input" type="checkbox" {{ $drink->is_alcohol ? 'checked' : '' }} disabled>
+                                </td>
+                                <td class="d-flex flex-row justify-content-left">
+                                    <a href="{{ route('drinks.show', $drink->id) }}" class="btn btn-sm btn-primary mx-2"><i class="fa-solid fa-list"></i>Detalhes</a>
+                                    <a href="{{ route('drinks.edit', $drink->id) }}" class="btn btn-sm btn-secondary mx-2"><i class="fa-solid fa-pencil"></i>Editar</a>
+                                   <form action="{{route('drinks.destroy', $drink->id)}}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger mx-2"><i class="fa-solid fa-trash"></i>Excluir</button>
+                                    </form>
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Drink;
 use Illuminate\Http\Request;
+use Session;
 
 class DrinkController extends Controller
 {
@@ -14,7 +15,7 @@ class DrinkController extends Controller
      */
     public function index()
     {
-        $drinks = Drink::select('id', 'name', 'is_alcohol')->get();
+        $drinks = Drink::select('id', 'name', 'is_alcohol')->orderBy('id', 'desc')->paginate();
 
         return response()->view('drinks.index', compact('drinks'));
     }
@@ -37,7 +38,22 @@ class DrinkController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        $drink = new Drink();
+        $drink->name = $request->name;
+
+        if ($request->has('isAlcohol')) {
+            $drink->is_alcohol = 1;
+        }
+
+        $saved = $drink->save();
+
+        if ($saved) {
+            Session::flash('alert-success', 'Bebida cadastrada com sucesso');
+            return redirect()->route('drinks.index');
+        }
+
+        Session::flash('alert-warning', 'Erro ao cadastrar');
+        return redirect()->back();
     }
 
     /**
@@ -48,7 +64,14 @@ class DrinkController extends Controller
      */
     public function show($id)
     {
-        //
+        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->first();
+
+        if ($drink) {
+            return response()->view('drinks.show', compact('drink'));
+        }
+
+        Session::flash('alert-warning', 'Erro ao exibir bebida');
+        return redirect()->back();
     }
 
     /**
@@ -59,7 +82,14 @@ class DrinkController extends Controller
      */
     public function edit($id)
     {
-        return response()->view('drinks.edit');
+        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->first();
+
+        if ($drink) {
+            return response()->view('drinks.edit', compact('drink'));
+        }
+
+        Session::flash('alert-warning', 'Erro ao tentar atualizar bebida');
+        return redirect()->back();
     }
 
     /**
@@ -71,7 +101,26 @@ class DrinkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->first();
+
+        $drink->name = $request->name;
+
+        if ($request->has('isAlcohol')) {
+            $drink->is_alcohol = 1;
+        } else {
+            $drink->is_alcohol = 0;
+        }
+
+        $updated = $drink->update();
+
+        if ($updated) {
+            Session::flash('alert-success', 'Bebida atualizada com sucesso');
+
+            return redirect()->route('drinks.index');
+        }
+
+        Session::flash('alert-warning', 'Erro ao atualizar');
+        return redirect()->back();
     }
 
     /**
@@ -82,6 +131,16 @@ class DrinkController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->first();
+
+        $deleted = $drink->delete();
+
+        if ($deleted) {
+            Session::flash('alert-success', 'Bebida deletada com sucesso');
+            return redirect()->route('drinks.index');
+        }
+
+        Session::flash('alert-warning', 'Erro ao excluir');
+        return redirect()->back();
     }
 }
