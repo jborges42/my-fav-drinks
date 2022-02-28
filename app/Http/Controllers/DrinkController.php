@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Drink;
 use Illuminate\Http\Request;
 
 class DrinkController extends Controller
@@ -13,7 +14,9 @@ class DrinkController extends Controller
      */
     public function index()
     {
-        return response()->view('drinks.index');
+        $drinks = Drink::select('id', 'name', 'is_alcohol')->get();
+
+        return response()->view('drinks.index', compact('drinks'));
     }
 
     /**
@@ -23,7 +26,7 @@ class DrinkController extends Controller
      */
     public function create()
     {
-        //
+        return response()->view('drinks.create');
     }
 
     /**
@@ -34,7 +37,7 @@ class DrinkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
@@ -56,7 +59,7 @@ class DrinkController extends Controller
      */
     public function edit($id)
     {
-        //
+        return response()->view('drinks.edit');
     }
 
     /**
