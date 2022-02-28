@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DrinkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::middleware(['auth'])->group(function () {
+    Route::resource('drinks', DrinkController::class);
+});
