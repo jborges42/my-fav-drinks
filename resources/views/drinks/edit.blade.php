@@ -9,13 +9,7 @@
                     Editar - <span class="my-auto text-uppercase"> {{ $drink->name }}</span>
                 </div>
                 <div class="card-body">
-                    @if (session('status'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('status') }}
-                    </div>
-                    @endif
-
-                    <form action="{{ route('drinks.update', $drink->id) }}"  method="POST" id="drink-form">
+                    <form action="{{ route('drinks.update', $drink->id) }}" method="POST" id="drink-form">
                         @method('patch')
                         @csrf
                         <div class="mb-3">
@@ -33,7 +27,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <input type="submit" form="drink-form" class="btn btn-md btn-success"  value="Atualizar">
+                            <input type="submit" form="drink-form" class="btn btn-md btn-success" value="Atualizar">
                         </div>
                     </form>
                 </div>

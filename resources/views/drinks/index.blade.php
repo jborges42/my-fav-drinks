@@ -11,9 +11,8 @@
                 </div>
                 <div class="card-body">
                     @if (session('alert') )
-                    {{dd(session('alert'))}}
-                    <div class="alert alert-success" role="alert">
-                        {{ session('status') }}
+                    <div class="alert {{ session('alert')['type'] }}" role="alert">
+                        {{ session('alert')['message'] }}
                     </div>
                     @endif
 
@@ -37,7 +36,7 @@
                                 <td class="d-flex flex-row justify-content-left">
                                     <a href="{{ route('drinks.show', $drink->id) }}" class="btn btn-sm btn-primary mx-2"><i class="fa-solid fa-list"></i>Detalhes</a>
                                     <a href="{{ route('drinks.edit', $drink->id) }}" class="btn btn-sm btn-secondary mx-2"><i class="fa-solid fa-pencil"></i>Editar</a>
-                                   <form action="{{route('drinks.destroy', $drink->id)}}" method="POST">
+                                    <form action="{{route('drinks.destroy', $drink->id)}}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-sm btn-danger mx-2" onclick="return confirm('Você realmente deseja excluir {{$drink->name}}?');"><i class="fa-solid fa-trash"></i>Excluir</button>

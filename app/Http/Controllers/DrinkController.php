@@ -50,11 +50,12 @@ class DrinkController extends Controller
         $saved = $drink->save();
 
         if ($saved) {
-            Session::flash('alert-success', 'Bebida cadastrada com sucesso');
+            Session::flash('alert', ['type' => 'alert-success', 'message' => 'Bebida cadastrada com sucesso']);
             return redirect()->route('drinks.index');
         }
 
-        Session::flash('alert-warning', 'Erro ao cadastrar');
+        Session::flash('alert', ['alert-danger', 'Erro ao cadastrar']);
+
         return redirect()->back();
     }
 
@@ -72,7 +73,6 @@ class DrinkController extends Controller
             return response()->view('drinks.show', compact('drink'));
         }
 
-        Session::flash('alert-warning', 'Erro ao exibir bebida');
         return redirect()->back();
     }
 
@@ -90,7 +90,6 @@ class DrinkController extends Controller
             return response()->view('drinks.edit', compact('drink'));
         }
 
-        Session::flash('alert-warning', 'Erro ao tentar atualizar bebida');
         return redirect()->back();
     }
 
@@ -116,12 +115,12 @@ class DrinkController extends Controller
         $updated = $drink->update();
 
         if ($updated) {
-            Session::flash('alert-success', 'Bebida atualizada com sucesso');
+            Session::flash('alert', ['type' => 'alert-success', 'message' => 'Bebida atualizada com sucesso']);
 
             return redirect()->route('drinks.index');
         }
 
-        Session::flash('alert-warning', 'Erro ao atualizar');
+        Session::flash('alert', ['type' => 'alert-danger','message' => 'Erro ao atualizar']);
         return redirect()->back();
     }
 
@@ -138,11 +137,11 @@ class DrinkController extends Controller
         $deleted = $drink->delete();
 
         if ($deleted) {
-            Session::flash('alert-success', 'Bebida deletada com sucesso');
+            Session::flash('alert', ['type' => 'alert-success', 'message' => 'Bebida deletada com sucesso']);
             return redirect()->route('drinks.index');
         }
 
-        Session::flash('alert-warning', 'Erro ao excluir');
+        Session::flash('alert', ['type' => 'alert-danger', 'message' => 'Erro ao excluir']);
         return redirect()->back();
     }
 }
