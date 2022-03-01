@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Drink;
 use Illuminate\Http\Request;
 use Session;
+use Auth;
 
 class DrinkController extends Controller
 {
@@ -15,7 +16,7 @@ class DrinkController extends Controller
      */
     public function index()
     {
-        $drinks = Drink::select('id', 'name', 'is_alcohol')->orderBy('id', 'desc')->paginate();
+        $drinks = Drink::select('id', 'name', 'is_alcohol')->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->paginate();
 
         return response()->view('drinks.index', compact('drinks'));
     }
@@ -40,6 +41,7 @@ class DrinkController extends Controller
     {
         $drink = new Drink();
         $drink->name = $request->name;
+        $drink->user_id = Auth::user()->id;
 
         if ($request->has('isAlcohol')) {
             $drink->is_alcohol = 1;
@@ -64,7 +66,7 @@ class DrinkController extends Controller
      */
     public function show($id)
     {
-        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->first();
+        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->where('user_id', Auth::user()->id)->first();
 
         if ($drink) {
             return response()->view('drinks.show', compact('drink'));
@@ -82,7 +84,7 @@ class DrinkController extends Controller
      */
     public function edit($id)
     {
-        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->first();
+        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->where('user_id', Auth::user()->id)->first();
 
         if ($drink) {
             return response()->view('drinks.edit', compact('drink'));
@@ -101,7 +103,7 @@ class DrinkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->first();
+        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->where('user_id', Auth::user()->id)->first();
 
         $drink->name = $request->name;
 
@@ -131,7 +133,7 @@ class DrinkController extends Controller
      */
     public function destroy($id)
     {
-        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->first();
+        $drink = Drink::select('id', 'name', 'is_alcohol')->where('id', $id)->where('user_id', Auth::user()->id)->first();
 
         $deleted = $drink->delete();
 
